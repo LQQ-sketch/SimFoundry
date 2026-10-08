@@ -548,6 +548,50 @@ def _deserialize_imagen_result(payload):
     return [_CachedImagenResult(image_base64=image_base64) for image_base64 in payload["images_base64"]]
 
 
+# ---------------------------------------------------------------------------
+# OpenAI-compatible VLM backend (e.g. Alibaba Bailian / DashScope Qwen-VL).
+# Enabled with SIMFOUNDRY_VLM_BACKEND=openai_compat; otherwise Gemini is used as before.
+#   SIMFOUNDRY_OPENAI_COMPAT_BASE_URL   default: DashScope compatible-mode endpoint
+#   SIMFOUNDRY_OPENAI_COMPAT_API_KEY    or DASHSCOPE_API_KEY
+#   SIMFOUNDRY_OPENAI_COMPAT_MODEL      default target model for every Gemini text model
+#   SIMFOUNDRY_OPENAI_COMPAT_MODEL_MAP  optional "gemini-a=qwen-x,gemini-b=qwen-y"
+#   SIMFOUNDRY_OPENAI_COMPAT_MAX_TOKENS default 8192
+# ---------------------------------------------------------------------------
+import mimetypes as _mimetypes
+
+_OPENAI_COMPAT_DEFAULT_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+_OPENAI_COMPAT_DEFAULT_MODEL = "qwen3-vl-plus"
+
+
+def vlm_backend():
+    return (os.environ.get("SIMFOUNDRY_VLM_BACKEND") or "gemini").strip().lower()
+
+
+def openai_compat_target_model(gemini_model):
+    mapping = {}
+    for item in (os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_MODEL_MAP") or "").split(","):
+        if "=" in item:
+            k, v = item.split("=", 1)
+            mapping[k.strip()] = v.strip()
+    return (
+        mapping.get(gemini_model)
+        or os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_MODEL")
+        or _OPENAI_COMPAT_DEFAULT_MODEL
+    )
+
+
+def openai_compat_settings():
+    base_url = os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_BASE_URL") or _OPENAI_COMPAT_DEFAULT_BASE_URL
+    api_key = os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_API_KEY") or os.environ.get("DASHSCOPE_API_KEY")
+    if not api_key:
+        raise ValueError(
+            "SIMFOUNDRY_VLM_BACKEND=openai_compat needs an API key: set DASHSCOPE_API_KEY "
+            "(or SIMFOUNDRY_OPENAI_COMPAT_API_KEY), e.g. in api_keys.txt at the repo root."
+        )
+    max_tokens = int(os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_MAX_TOKENS", "8192"))
+    return base_url, api_key, max_tokens
+
+
 class Gemini(VLM_API):
     """
     Class for interfacing with supported Gemini models
@@ -695,6 +739,10 @@ class Gemini(VLM_API):
             None or list of google.genai.types.GenerateContentResponse: Stream of responses generated from Gemini
         """
         image_paths = [] if image_paths is None else [image_paths] if isinstance(image_paths, (str, os.PathLike)) else list(image_paths)
+        if vlm_backend() == "openai_compat":
+            return self._call_openai_compat(
+                prompt, image_paths, temperature, top_p, seed, n_retries, print_results
+            )
         cache = RemoteModelCache.from_env()
         cache_request = {
             "prompt": prompt,
@@ -789,6 +837,93 @@ class Gemini(VLM_API):
                 key=cache_key,
                 request=cache_request,
                 response=_serialize_gemini_result(result),
+            )
+        return result
+
+    def _call_openai_compat(self, prompt, image_paths, temperature, top_p, seed, n_retries, print_results):
+        """Send a Gemini-style request to an OpenAI-compatible chat endpoint (e.g. Qwen-VL on Bailian)
+        and wrap the reply so get_result_text / caching behave exactly like a Gemini response."""
+        if "IMAGE" in self.VERSIONS[self.model]["modalities"]:
+            raise NotImplementedError(
+                f"SIMFOUNDRY_VLM_BACKEND=openai_compat only supports text-output models, got image model "
+                f"{self.model!r}. Use FLUX for image editing, e.g. s5_scene.removal_model=flux, s6_upsample.model=flux."
+            )
+        target_model = openai_compat_target_model(self.model)
+        cache = RemoteModelCache.from_env()
+        cache_request = {
+            "prompt": prompt,
+            "image_inputs": image_digests(image_paths),
+            "temperature": temperature,
+            "top_p": top_p,
+            "seed": seed,
+            "gemini_model": self.model,
+        }
+        cache_key = cache.key_for(provider="openai_compat", model=target_model, request=cache_request)
+        if cache.test_enabled:
+            return _deserialize_gemini_result(cache.load_response(provider="openai_compat", key=cache_key))
+        if cache.cache_enabled:
+            cached_response = cache.load_response_if_exists(provider="openai_compat", key=cache_key)
+            if cached_response is not None:
+                return _deserialize_gemini_result(cached_response)
+
+        base_url, api_key, max_tokens = openai_compat_settings()
+        from openai import OpenAI as _OpenAI
+        client = _OpenAI(api_key=api_key, base_url=base_url, timeout=(self.timeout_ms or 300_000) / 1000.0)
+
+        content = []
+        for image_path in image_paths:
+            mime = _mimetypes.guess_type(str(image_path))[0] or "image/png"
+            content.append({
+                "type": "image_url",
+                "image_url": {"url": f"data:{mime};base64,{self.encode_image(image_path)}"},
+            })
+        content.append({"type": "text", "text": prompt})
+        request_kwargs = dict(
+            model=target_model,
+            messages=[{"role": "user", "content": content}],
+            temperature=temperature,
+            max_tokens=max_tokens,
+            seed=seed,
+        )
+        if top_p and top_p > 0:  # Gemini code passes top_p=0; OpenAI-style APIs require (0, 1]
+            request_kwargs["top_p"] = top_p
+
+        text, finish_reason, last_exc = None, None, None
+        budget = n_retries
+        i = 0
+        while i < budget and text is None:
+            if self.verbose:
+                print(f"Querying OpenAI-compat [{target_model} for {self.model}]: attempt {i + 1} of {budget}...", flush=True)
+            try:
+                response = client.chat.completions.create(**request_kwargs)
+                choice = response.choices[0]
+                text = choice.message.content or ""
+                finish_reason = choice.finish_reason
+            except Exception as e:
+                last_exc = e
+                budget = handle_remote_exception(
+                    e, attempt=i, n_retries=budget, provider="OpenAICompat", model=target_model
+                )
+            i += 1
+        if text is None:
+            raise RemoteCallFailed(
+                f"OpenAI-compat [{target_model}] failed after {budget} attempts: {last_exc}"
+            ) from last_exc
+        if print_results:
+            print(text)
+
+        payload = {"chunks": [{"text": text, "parts": [{"text": text}]}]}
+        result = _deserialize_gemini_result(payload)
+        if finish_reason not in (None, "stop"):
+            # Let gemini_response_problem / get_result_text reject truncated or filtered replies.
+            result[0].candidates[0].finish_reason = "MAX_TOKENS" if finish_reason == "length" else str(finish_reason).upper()
+        elif cache.cache_enabled:
+            cache.store_response(
+                provider="openai_compat",
+                model=target_model,
+                key=cache_key,
+                request=cache_request,
+                response=payload,
             )
         return result
 
@@ -1151,7 +1286,8 @@ class FLUX1(VLM_API):
                 "The Flux backend requires a diffusers version that provides "
                 "FluxKontextPipeline. Install or upgrade the project's diffusers dependency."
             )
-        self.pipeline = pipeline_cls.from_pretrained(self.MODEL_IDS[model], torch_dtype=dtype)
+        model_path = os.environ.get("SIMFOUNDRY_FLUX_KONTEXT_PATH") or self.MODEL_IDS[model]
+        self.pipeline = pipeline_cls.from_pretrained(model_path, torch_dtype=dtype)
         if enable_cpu_offload:
             self.pipeline.enable_model_cpu_offload()
         self.device = device
