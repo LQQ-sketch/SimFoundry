@@ -1,0 +1,505 @@
+accelerate==1.15.0
+addict==2.4.0
+aenum==3.1.17
+aioboto3==15.1.0
+aiobotocore==2.24.0
+aiodns==3.1.1
+aiofiles==23.2.1
+aiohappyeyeballs==2.4.4
+aiohttp==3.11.11
+aioitertools==0.11.0
+aiosignal==1.3.2
+albucore==0.0.24
+albumentations==2.0.8
+annotated-doc==0.0.5
+annotated-types @ file:///home/conda/feedstock_root/build_artifacts/annotated-types_1784935130617/work
+antlr4-python3-runtime==4.9.3
+anyio==4.14.2
+apsw==3.53.4.0
+archspec @ file:///home/conda/feedstock_root/build_artifacts/archspec_1790873640670/work
+argcomplete==3.7.2
+argon2-cffi==25.1.0
+argon2-cffi-bindings==26.1.0
+arrow==1.4.0
+asteval==1.0.6
+asttokens==3.0.2
+async-lru==2.3.0
+async-timeout==5.0.1
+attrs==25.1.0
+av==18.1.0
+awscrt==0.23.8
+azure-core==1.28.0
+azure-identity==1.13.0
+azure-storage-blob==12.17.0
+babel==2.18.0
+backports.zstd @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_backports.zstd_1788491293/work
+-e git+https://github.com/StanfordVL/BEHAVIOR-1K.git@d89aae4e0e9a1de3cf8285cb9669c11d8c8bb864#egg=bddl&subdirectory=bddl3
+beautifulsoup4 @ file:///home/conda/feedstock_root/build_artifacts/beautifulsoup4_1780853104376/work
+bleach==6.4.0
+blinker==1.9.0
+bokeh==3.9.2
+boltons @ file:///home/conda/feedstock_root/build_artifacts/boltons_1788865829832/work
+boto3==1.39.11
+botocore==1.39.11
+braceexpand==0.1.7
+Brotli @ file:///home/conda/feedstock_root/build_artifacts/brotli-split_1788480187707/work
+build @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_python-build_1790158724/work
+cached-property @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_cached_property_1787678456/work
+certifi==2026.7.22
+cffi==1.17.1
+chardet @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_chardet_1786937020/work
+charset-normalizer==3.3.2
+clarabel==0.11.1
+click==8.5.0
+clip @ git+https://github.com/openai/CLIP.git@d05afc436d78f1c48dc0dbf8e5980a9d471f35f6
+cloudpickle==3.1.2
+cmake==4.4.4
+cmeel==0.61.0
+cmeel-assimp==5.4.3.1
+cmeel-boost==1.83.0
+cmeel-console-bridge==1.0.2.3
+cmeel-octomap==1.10.0
+cmeel-qhull==8.0.2.1
+cmeel-tinyxml==2.6.2.3
+cmeel-tinyxml2==11.0.0
+cmeel-urdfdom==3.1.1.1
+cmeel-zlib==1.3.2
+coacd==1.0.14
+coal==3.0.3
+colorama @ file:///home/conda/feedstock_root/build_artifacts/colorama_1733218098505/work
+comm==0.2.3
+-e git+https://github.com/NVlabs/FoundationPose.git@e3d597b8c6b851d053094ebd6fa240191c5238f8#egg=common&subdirectory=bundlesdf/mycuda
+conda @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda_1790968141/work/conda-src
+conda-build @ file:///home/conda/feedstock_root/build_artifacts/conda-build_1790881988531/work
+conda-libmamba-solver @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda-libmamba-solver_1784200590/work/src
+conda-lockfiles @ file:///home/conda/feedstock_root/build_artifacts/conda-lockfiles_1790164213976/work
+conda-package-handling @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda-package-handling_1788438543/work
+conda-pypi @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda-pypi_1790703648/work
+conda-rattler-solver @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda-rattler-solver_1790349122/work
+conda-self @ file:///home/conda/feedstock_root/build_artifacts/conda-self_1790101636564/work
+conda_index @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_conda-index_1788522660/work
+conda_package_streaming @ file:///home/conda/feedstock_root/build_artifacts/conda-package-streaming_1781292971987/work
+ConfigArgParse==1.8.0
+contourpy==1.3.1
+coverage==7.6.1
+cryptography==44.0.0
+cvxpy==1.6.7
+cycler==0.11.0
+Cython==3.3.0
+dash==4.4.1
+datasets==2.21.0
+debugpy==1.8.22
+decorator==4.4.2
+decord==0.6.0
+deepdiff==8.6.2
+defusedxml==0.7.1
+-e git+https://github.com/ByteDance-Seed/Depth-Anything-3.git@3d835ec1a5802d64a8b8b15f817a1ab54809bfe4#egg=depth_anything_3
+-e git+https://github.com/apple/ml-depth-pro.git@9efe5c1def37a26c5367a71df664b18e1306c708#egg=depth_pro
+diffusers==0.40.0
+dill==0.3.8
+distro @ file:///home/conda/feedstock_root/build_artifacts/distro_1734729835256/work
+docstring_parser==0.18.0
+draccus==0.10.0
+e3nn==0.6.0
+easyhid==0.0.10
+eigenpy==3.5.1
+einops==0.8.2
+embreex==4.4.0
+et_xmlfile==2.0.0
+evalidate @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_evalidate_1746793833/work
+evdev==1.9.3
+evo==1.37.1
+executing==2.2.1
+faiss==1.12.0
+Farama-Notifications==0.0.6
+fastapi==0.115.7
+fastjsonschema==2.22.2
+ffmpeg-python==0.2.0
+filelock==3.13.1
+flash_attn @ file:///data/cache/flash_attn-2.8.3%2Bcu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl#sha256=cd1a45ebfc1731a13e55ad68e0c9ad92390ddfffba306f9222be67c6d5a805af
+Flask==3.1.3
+flatbuffers==25.12.19
+fonttools==4.55.3
+fqdn==1.6.0
+freetype-py==2.5.1
+frozendict @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_frozendict_1781203600/work
+frozenlist==1.5.0
+fsspec==2024.6.1
+ftfy==6.1.1
+future==1.0.0
+fvcore==0.1.5.post20221221
+g4f==8.6.5
+gdown==6.4.1
+gitdb==4.0.12
+GitPython==3.2.0
+google-api-core==2.40.0
+google-auth==2.59.1
+google-cloud-aiplatform==2.3.0
+google-cloud-bigquery==3.46.1
+google-cloud-core==2.8.0
+google-cloud-resource-manager==1.19.0
+google-cloud-storage==3.16.0
+google-crc32c==1.9.0
+google-genai==2.28.0
+google-resumable-media==2.11.0
+googleapis-common-protos==1.75.5
+GPUtil==1.4.0
+graphviz==0.21
+grpc-google-iam-v1==0.14.5
+grpcio==1.84.0
+grpcio-status==1.84.0
+gunicorn==23.0.0
+gymnasium==1.3.0
+h11 @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_h11_1767729720/work
+h2 @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_h2_1785796355/work
+h5py==3.16.0
+hf-xet==1.6.0
+hpack @ file:///home/conda/feedstock_root/build_artifacts/hpack_1782283902770/work
+hpp-fcl==2.4.4
+httpcore @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_httpcore_1745602916/work
+httpcore2==2.13.1
+httptools==0.6.1
+httpx @ file:///home/conda/feedstock_root/build_artifacts/httpx_1733663348460/work
+httpx2==2.13.1
+huggingface_hub==1.33.0
+hydra-core==1.3.7
+hyperframe @ file:///home/conda/feedstock_root/build_artifacts/hyperframe_1737618333194/work
+idna==3.20
+idna-ssl==1.1.0
+imageio==2.37.0
+imageio-ffmpeg==0.6.0
+imgaug==0.4.0
+importlib_metadata @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_importlib-metadata_1787943971/work
+iniconfig==2.3.0
+installer @ file:///home/conda/feedstock_root/build_artifacts/python-installer_1778554130319/work
+iopath==0.1.10
+ipykernel==7.4.0
+ipython==9.17.1
+ipython_pygments_lexers==1.1.1
+ipywidgets==8.1.9
+isaacsim @ file:///data/cache/isaacsim/isaacsim-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=ad2c027831ed5d4a62552735bb799dea4e4604530d2ab9b526ddb6cd19a98c11
+isaacsim-app @ file:///data/cache/isaacsim/isaacsim_app-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=88d0ad9d56439aacd670490dab7cf55c72cece72894e3932a9a0493b12fa60a2
+isaacsim-asset @ file:///data/cache/isaacsim/isaacsim_asset-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=260bb3486e263488fd406c28da37ef79d73da7fd9f9ea6c7a36b111a8a6f8361
+isaacsim-benchmark @ file:///data/cache/isaacsim/isaacsim_benchmark-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=8353d696c1231524ac263b5700f79fe5f9b8c9dd0ef003580fec5d9c166bc5b3
+isaacsim-code-editor @ file:///data/cache/isaacsim/isaacsim_code_editor-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=4dbc1833765987aa614e78f4166ef1dcddd5282fe4f395ffc5e3b6ebee653b10
+isaacsim-core @ file:///data/cache/isaacsim/isaacsim_core-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=cfdd5d82ce455d654c68d37ff4fdd062190e3414289beb6f9b876a10a851b92d
+isaacsim-cortex @ file:///data/cache/isaacsim/isaacsim_cortex-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=b2f9b7f2f4aa8b856bb7a5f7808aec90f633b2ee409e709099a0d071c57a6296
+isaacsim-example @ file:///data/cache/isaacsim/isaacsim_example-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=a537336402f631921da4bee742ad846949824d48c84dacfbc7e8fd97b2d23c04
+isaacsim-extscache-kit @ file:///data/cache/isaacsim/isaacsim_extscache_kit-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=82c0c43a4a8a62a37c82a6c32a489be6ac2fb52baf17041dcccb80295d94721f
+isaacsim-extscache-kit-sdk @ file:///data/cache/isaacsim/isaacsim_extscache_kit_sdk-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=be8cb4520eb9c97c4ddd46e1c92885bb9e5dbc581e407930f186a3808eafc038
+isaacsim-extscache-physics @ file:///data/cache/isaacsim/isaacsim_extscache_physics-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=a4b450c7b33d2ada42e1736ac48e002103aac0b93e4f618d9fa4c212762dc74b
+isaacsim-gui @ file:///data/cache/isaacsim/isaacsim_gui-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=af0a3e2eb9ecd6c5a6088fcd50a480736c391f72bd38a854cc69a1c13861800b
+isaacsim-kernel @ file:///data/cache/isaacsim/isaacsim_kernel-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=f981290a70ad89f169fb9c47bd55833665677879ebc46ed3992756c617ac02fc
+isaacsim-replicator @ file:///data/cache/isaacsim/isaacsim_replicator-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=8fe63ec5adf9fbe12aef82b4634a9662f8ad933d8f8428c64f11dc71406e4948
+isaacsim-rl @ file:///data/cache/isaacsim/isaacsim_rl-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=d1fdc4f2046a205ba34a3a69c96f5a51744783f74cd824e047f43bc1ee66c7b9
+isaacsim-robot @ file:///data/cache/isaacsim/isaacsim_robot-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=3d7529f76b390210fd3dad66101958f4292f7306c9182b06cf532763341087e2
+isaacsim-robot-motion @ file:///data/cache/isaacsim/isaacsim_robot_motion-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=0163f3d3243f0641502527f066febe22c93e651eb54e911442f88bc3fb37db9c
+isaacsim-robot-setup @ file:///data/cache/isaacsim/isaacsim_robot_setup-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=9d48262259e89cb1d02c325d69cca6ece24919d4736f8a5ac3db861ddb962de0
+isaacsim-ros1 @ file:///data/cache/isaacsim/isaacsim_ros1-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=a0b541c266c409b7e48388f2f2bfce8a0417735b4fb238dd0b1dbf9f1a9df06e
+isaacsim-ros2 @ file:///data/cache/isaacsim/isaacsim_ros2-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=0b9ee70c64a54a8ee416de2a785b71270832c15b901f86adf6bd18153dc66662
+isaacsim-sensor @ file:///data/cache/isaacsim/isaacsim_sensor-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=3c52d04aa11a213103031a3a53f2a74866a27dc47fd88bbd3eb6c52c65f163f1
+isaacsim-storage @ file:///data/cache/isaacsim/isaacsim_storage-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=57d90579ef9ce8e89e39bd38f30f81577a051c19e5950e8d4a67c3af894fd625
+isaacsim-template @ file:///data/cache/isaacsim/isaacsim_template-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=76e19875380d9e5432a01b3b14d2d640d1d092069518e36c597eb79ff1a06474
+isaacsim-test @ file:///data/cache/isaacsim/isaacsim_test-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=b3a1b647d6bec16b649b5d6f4199b0dd8aa3d70fcc5cc9603fef8e6e9bf986dc
+isaacsim-utils @ file:///data/cache/isaacsim/isaacsim_utils-5.1.0.0-cp311-none-manylinux_2_35_x86_64.whl#sha256=becd39be3fc0d3b5abe332febf50c2af518aa99db5582344b53cba6076385116
+isodate==0.6.1
+isoduration==20.11.0
+itsdangerous==2.2.0
+janus==2.0.0
+jedi==0.20.0
+Jinja2 @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_jinja2_1764517220/work
+jiter==0.17.0
+jmespath==1.0.1
+joblib==1.6.0
+json5==0.15.0
+jsonlines==4.0.0
+jsonpatch==1.33
+jsonpointer==3.1.1
+jsonschema @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_jsonschema_1787579299/work
+jsonschema-specifications @ file:///tmp/tmptzik3dqa/src
+jupyter-events==0.12.1
+jupyter-lsp==2.3.1
+jupyter_builder==1.2.3
+jupyter_client==8.10.0
+jupyter_core==5.9.1
+jupyter_server==2.21.1
+jupyter_server_terminals==0.5.4
+jupyterlab==4.6.4
+jupyterlab_pygments==0.3.0
+jupyterlab_server==2.28.1
+jupyterlab_widgets==3.0.17
+jupytext==1.19.5
+kiwisolver==1.4.4
+kornia==0.8.3
+kornia_rs==0.2.0
+lark==1.3.1
+lazy-loader==0.6
+lerobot @ file:///data/cache/lerobot-577cd10974b84bea1f06b6472eb9e5e74e07f77a.zip#sha256=0d780148b1f274812ab044cf364640b9e2771658dfcad271854d081e9bcfcff1
+libarchive-c @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_python-libarchive-c_1754663558/work
+libcoal==3.0.3
+libmambapy @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_libmambapy_1788274100/work/libmambapy
+libpinocchio==4.1.0
+lief @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_py-lief_1791062532/work/api/python
+llvmlite==0.50.0
+loguru==0.7.3
+lxml==6.1.3
+lz4==4.4.5
+markdown-it-py==4.2.0
+MarkupSafe==2.1.3
+matplotlib==3.10.3
+matplotlib-inline==0.2.2
+mdit-py-plugins==0.6.1
+mdurl==0.1.2
+menuinst @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_menuinst_1790716788/work
+mergedeep==1.3.4
+meshcat==0.3.2
+mistune==3.3.4
+moviepy==1.0.3
+mpmath==1.3.0
+msal==1.27.0
+msal-extensions==1.0.0
+msgpack @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_msgpack-python_1790682659/work
+multidict==6.1.0
+multiprocess==0.70.16
+mypy_extensions==1.1.0
+narwhals==2.26.0
+natsort==8.4.0
+nbclient==0.11.0
+nbconvert==7.17.1
+nbformat==5.11.1
+nest-asyncio==1.5.6
+nest-asyncio2==1.7.3
+networkx==3.3
+ninja==1.13.2
+nltk==3.10.3
+nodejs==0.1.1
+notebook_shim==0.2.4
+numba==0.68.0
+numexpr==2.14.2
+numpy==1.26.4
+nvdiffrast @ file:///data/SimFoundry/deps/FoundationPose/extensions/nvdiffrast
+nvidia-cublas-cu12==12.8.3.14
+nvidia-cuda-cupti-cu12==12.8.57
+nvidia-cuda-nvrtc-cu12==12.8.61
+nvidia-cuda-runtime-cu12==12.8.57
+nvidia-cudnn-cu12==9.7.1.26
+nvidia-cufft-cu12==11.3.3.41
+nvidia-cufile-cu12==1.13.0.11
+nvidia-curand-cu12==10.3.9.55
+nvidia-cusolver-cu12==11.7.2.55
+nvidia-cusparse-cu12==12.5.7.53
+nvidia-cusparselt-cu12==0.6.3
+nvidia-ml-py==13.615.71
+nvidia-nccl-cu12==2.26.2
+nvidia-nvjitlink-cu12==12.8.61
+nvidia-nvtx-cu12==12.8.55
+oauthlib==3.2.2
+objaverse==0.1.7
+omegaconf==2.3.1
+-e git+https://github.com/StanfordVL/BEHAVIOR-1K.git@d89aae4e0e9a1de3cf8285cb9669c11d8c8bb864#egg=omnigibson&subdirectory=OmniGibson
+omniverse-kit @ file:///data/cache/isaacsim/omniverse_kit-107.3.1.206797-cp311-none-manylinux_2_35_x86_64.whl#sha256=15b14affe6390adca27b36e5f5eae153666440dfe61a7b17b23356f12544f43d
+onnxruntime==1.30.0
+open3d==0.20.0
+openai==3.24.0
+opencv-contrib-python==4.11.0.86
+opencv-python==4.11.0.86
+opencv-python-headless==4.11.0.86
+openpyxl==3.1.5
+opentelemetry-api==1.45.0
+opentelemetry-exporter-http-transport==0.66b0
+opentelemetry-exporter-otlp-common==0.66b0
+opentelemetry-exporter-otlp-proto-common==1.45.0
+opentelemetry-exporter-otlp-proto-http==1.45.0
+opentelemetry-proto==1.45.0
+opentelemetry-sdk==1.45.0
+opentelemetry-semantic-conventions==0.66b0
+opt-einsum-fx==0.1.4
+opt_einsum==3.4.0
+optional-django==0.1.0
+orderly-set==5.5.0
+osqp==0.6.7.post3
+overrides==7.7.0
+packaging==25.0
+Panda3D==1.10.16
+pandas==3.0.6
+pandocfilters==1.5.1
+parso==0.8.7
+pexpect==4.9.0
+pillow==12.3.0
+pillow_heif==1.8.0
+pin==2.7.0
+Pint==0.20.1
+pkginfo @ file:///home/conda/feedstock_root/build_artifacts/pkginfo_1739984581450/work
+platformdirs @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_platformdirs_1790738680/work
+plotly==7.1.0
+pluggy @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_pluggy_1764896838/work
+plyfile==1.1.3
+polars==1.44.2
+polars-runtime-32==1.44.2
+pooch==1.9.0
+portalocker==2.7.0
+-e git+https://github.com/SpatialVision/Prior-Depth-Anything.git@8c029cbca669443fe0bbf8dcefb5f91ad531084d#egg=prior_depth_anything
+probreg==0.3.8
+proglog==0.1.12
+progressbar==2.5
+prometheus_client==0.26.0
+prompt_toolkit==3.0.53
+propcache==0.2.1
+proto-plus==1.29.0
+protobuf==6.33.6
+psutil==5.9.8
+ptyprocess==0.7.0
+pure_eval==0.2.4
+py-rattler @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_py-rattler_1789055115/work
+py-rattler-build @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_py-rattler-build_1789639970/work
+py-spy==0.4.2
+pyarrow==25.0.1
+pyasn1==0.6.4
+pyasn1_modules==0.4.2
+pybind11==3.1.0
+pybullet==3.2.7
+pycares==4.8.0
+pycocotools==2.0.11
+pycolmap==4.2.1
+pycosat @ file:///home/conda/feedstock_root/build_artifacts/pycosat_1790861617215/work
+pycparser==3.0
+pycryptodome==3.23.0
+pydantic==2.13.5
+pydantic_core==2.46.5
+pyDeprecate==0.11.0
+pyglet==1.5.31
+Pygments==2.21.0
+PyJWT==2.15.1
+PyMatting==1.1.16
+pymeshlab==2022.2.post4
+pyngrok==8.1.2
+pynput==1.8.2
+PyOpenGL==3.1.0
+PyOpenGL-accelerate==3.1.10
+pyparsing==3.0.9
+pyperclip==1.8.0
+pypng==0.20220715.0
+pyproject_hooks @ file:///home/conda/feedstock_root/build_artifacts/pyproject_hooks_1733710025763/work
+pyrender==0.1.45
+pysdf==0.1.9
+pyserial==3.5
+PySocks @ file:///home/conda/feedstock_root/build_artifacts/pysocks_1733217236728/work
+pyspacemouse==1.1.5
+pytest==9.1.1
+python-dateutil==2.9.0.post0
+python-json-logger==4.2.0
+python-multipart==0.0.20
+python-xlib==0.33
+pytorch3d @ git+https://github.com/facebookresearch/pytorch3d.git@75ebeeaea0908c5527e7b1e305fbc7681382db47
+pytz==2024.1
+PyYAML==6.0.2
+pyyaml-include==1.4.1
+pyzmq==27.2.0
+qdldl==0.1.7.post5
+qrcode==7.4.2
+referencing @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_referencing_1760379115/work
+regex==2026.9.29
+rembg==2.0.85
+requests==2.34.2
+requests-oauthlib==1.3.1
+rerun-sdk==0.22.1
+retrying==1.4.2
+rfc3339-validator==0.1.4
+rfc3986-validator==0.1.1
+rfc3987-syntax==1.1.0
+rich==15.0.0
+roma==1.6.1
+rosbags==0.11.5
+rpds-py @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_rpds-py_1788577324/work
+Rtree==1.3.0
+ruamel.yaml @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_ruamel.yaml_1767538149/work
+ruamel.yaml.clib @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_ruamel.yaml.clib_1788881215/work
+s3transfer==0.13.1
+safetensors==0.8.0
+-e git+https://github.com/facebookresearch/sam3.git@46957e47805eaa273f4aa7bbbd25a88bca9108ce#egg=sam3
+scikit-image==0.26.0
+scikit-learn==1.9.1
+scipy==1.17.1
+scs==3.3.1
+seaborn==0.13.2
+Send2Trash==2.1.0
+sentence-transformers==6.1.0
+sentencepiece==0.2.2
+sentry-sdk==2.29.1
+shapely==2.1.2
+shellingham==1.5.4
+-e git+https://github.com/LQQ-sketch/SimFoundry.git@60d66b011eb96cf822fc3b3311045bdac37ea050#egg=simfoundry
+simplejson==4.2.0
+simsimd==6.5.16
+six==1.17.0
+smmap==5.0.3
+sniffio @ file:///home/conda/feedstock_root/build_artifacts/sniffio_1762941432086/work
+soupsieve @ file:///home/conda/feedstock_root/build_artifacts/soupsieve_1790238034584/work
+stack-data==0.6.3
+starlette==0.45.3
+stringzilla==5.2.0
+supervision==0.30.6
+sympy==1.13.3
+tabulate==0.10.0
+tenacity==9.1.4
+termcolor==3.3.0
+terminado==0.18.1
+threadpoolctl==3.7.0
+tifffile==2026.3.3
+timm==1.0.30
+tinycss2==1.5.1
+tokenizers==0.23.2
+toml==0.10.2
+tomli @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_tomli_1774492402/work
+tomli_w @ file:///home/conda/feedstock_root/build_artifacts/tomli-w_1736962227066/work
+torch==2.7.0+cu128
+torch_cluster==1.6.3+pt27cu128
+torchaudio==2.7.0+cu128
+torchnet==0.0.4
+torchvision==0.22.0+cu128
+tornado==6.5.10
+tqdm @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_tqdm_1789187326/work
+traitlets==5.16.1
+transformations==2026.1.18
+transformers==5.18.0
+transforms3d==0.4.2
+trimesh==4.5.1
+triton==3.3.0
+truststore @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_truststore_1766494826/work
+typer==0.27.2
+typing-inspect==0.9.0
+typing-inspection==0.4.2
+typing_extensions==4.16.0
+tzdata==2026.5
+u-msgpack-python==2.8.0
+ultralytics==8.4.172
+ultralytics-platform==0.1.79
+ultralytics-thop==2.2.2
+unearth @ file:///home/conda/feedstock_root/build_artifacts/unearth_1786844942393/work
+uri-template==1.3.0
+urllib3==2.8.0
+uvicorn==0.29.0
+videoio==0.3.0
+visdom==0.2.4
+wandb==0.30.0
+warp-lang==1.17.0
+watchdog==4.0.0
+wcwidth==0.9.1
+webcolors==25.10.0
+webdataset==1.0.2
+webencodings==0.6.1
+websocket-client==1.9.2
+websockets==17.2
+Werkzeug==3.1.9
+widgetsnbextension==4.0.16
+wrapt==1.16.0
+xatlas==0.0.11
+xformers==0.0.30
+xlsxwriter==3.2.9
+xxhash==4.0.1
+xyzservices==2026.9.1
+yacs==0.1.8
+yarl==1.18.3
+zipp @ file:///home/conda/feedstock_root/build_artifacts/bld/rattler-build_zipp_1791091060/work
+zmq==0.0.0
+zstandard==0.25.0

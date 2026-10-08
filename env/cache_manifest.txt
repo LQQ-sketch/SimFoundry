@@ -1,0 +1,19 @@
+total 1059692
+drwxrwxr-x 11 ubuntu ubuntu      4096 Oct  5 12:10 .
+drwxr-xr-x 13 ubuntu ubuntu      4096 Oct  5 10:46 ..
+-rw-r--r--  1 ubuntu ubuntu  67040989 Oct  5 08:51 RealESRGAN_x4plus.pth
+drwxrwxr-x  3 ubuntu ubuntu      4096 Oct  4 16:26 conda
+-rw-rw-r--  1 ubuntu ubuntu 256027206 Oct  4 19:50 flash_attn-2.8.3+cu12torch2.7cxx11abiTRUE-cp311-cp311-linux_x86_64.whl
+drwx------  4 ubuntu ubuntu      4096 Oct  4 22:52 huggingface
+-rw-rw-r--  1 ubuntu ubuntu     26510 Oct  4 22:40 install_simfoundry.sh.bak
+drwxrwxr-x  2 ubuntu ubuntu      4096 Oct  4 21:48 isaacsim
+-rw-rw-r--  1 ubuntu ubuntu   6036234 Oct  4 22:34 lerobot-577cd10974b84bea1f06b6472eb9e5e74e07f77a.zip
+drwxrwxr-x  3 ubuntu ubuntu      4096 Oct  4 19:10 mamba
+drwxrwxr-x  2 ubuntu ubuntu      4096 Oct  4 22:51 matplotlib
+drwx------  2 ubuntu ubuntu      4096 Oct  4 15:13 mesa_shader_cache
+drwxrwxr-x  8 ubuntu ubuntu      4096 Oct  5 11:59 nvdiffrast-253ac4fcea7de5f396371124af597e6cc957bfae
+-rw-rw-r--  1 ubuntu ubuntu  10766125 Oct  5 09:11 nvdiffrast-253ac4fcea7de5f396371124af597e6cc957bfae.zip
+drwx------  3 ubuntu ubuntu      4096 Oct  4 15:13 nvidia
+-rw-r--r--  1 ubuntu ubuntu  73639504 Oct  5 12:08 pytorch3d-0.7.8+pt2.7.0cu128-cp310-cp310-linux_x86_64.whl
+drwxr-xr-x 12 ubuntu ubuntu      4096 Oct  5 12:59 xformers
+-rw-rw-r--  1 ubuntu ubuntu 671526174 Oct  5 09:10 xformers.tar.gz

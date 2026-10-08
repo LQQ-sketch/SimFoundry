@@ -1,0 +1,5 @@
+name, driver_version
+NVIDIA GeForce RTX 4090, 570.133.07
+Cuda compilation tools, release 12.8, V12.8.93
+Build cuda_12.8.r12.8/compiler.35583870_0
+Description:	Ubuntu 22.04.4 LTS
