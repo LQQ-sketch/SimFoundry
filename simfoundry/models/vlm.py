@@ -556,11 +556,36 @@ def _deserialize_imagen_result(payload):
 #   SIMFOUNDRY_OPENAI_COMPAT_MODEL      default target model for every Gemini text model
 #   SIMFOUNDRY_OPENAI_COMPAT_MODEL_MAP  optional "gemini-a=qwen-x,gemini-b=qwen-y"
 #   SIMFOUNDRY_OPENAI_COMPAT_MAX_TOKENS default 8192
+#   SIMFOUNDRY_OPENAI_COMPAT_BOX_ORDER  "xyxy" (default; Qwen3-VL) or "yxyx" (reply already Gemini order)
 # ---------------------------------------------------------------------------
 import mimetypes as _mimetypes
+import re as _re
 
 _OPENAI_COMPAT_DEFAULT_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 _OPENAI_COMPAT_DEFAULT_MODEL = "qwen3-vl-plus"
+
+
+_BOX_2D_RE = _re.compile(
+    r'("box_2d"\s*:\s*\[\s*)(-?\d+(?:\.\d+)?)(\s*,\s*)(-?\d+(?:\.\d+)?)'
+    r'(\s*,\s*)(-?\d+(?:\.\d+)?)(\s*,\s*)(-?\d+(?:\.\d+)?)(\s*\])'
+)
+
+
+def openai_compat_box_order():
+    return (os.environ.get("SIMFOUNDRY_OPENAI_COMPAT_BOX_ORDER") or "xyxy").strip().lower()
+
+
+def convert_box_2d_to_gemini_order(text, box_order=None):
+    """Rewrite every ``"box_2d": [x1, y1, x2, y2]`` as Gemini's ``[ymin, xmin, ymax, xmax]``.
+
+    Qwen3-VL always emits ``[x1, y1, x2, y2]`` (0-1000) even when the prompt asks for Gemini's
+    order, while every downstream consumer parses Gemini's. A no-op when ``box_order`` is ``yxyx``.
+    """
+    if (box_order or openai_compat_box_order()) != "xyxy":
+        return text
+    return _BOX_2D_RE.sub(
+        lambda m: f"{m[1]}{m[4]}{m[3]}{m[2]}{m[5]}{m[8]}{m[7]}{m[6]}{m[9]}", text
+    )
 
 
 def vlm_backend():
@@ -857,6 +882,7 @@ class Gemini(VLM_API):
             "top_p": top_p,
             "seed": seed,
             "gemini_model": self.model,
+            "box_order": openai_compat_box_order(),
         }
         cache_key = cache.key_for(provider="openai_compat", model=target_model, request=cache_request)
         if cache.test_enabled:
@@ -909,6 +935,7 @@ class Gemini(VLM_API):
             raise RemoteCallFailed(
                 f"OpenAI-compat [{target_model}] failed after {budget} attempts: {last_exc}"
             ) from last_exc
+        text = convert_box_2d_to_gemini_order(text)
         if print_results:
             print(text)
 
