@@ -29,6 +29,20 @@ torch.backends.cudnn.allow_tf32 = True
 SAM3_ROOT = os.path.join(os.path.dirname(sam3.__file__), "..")
 
 
+def sam3_checkpoint_kwargs():
+    """Local-weights kwargs for ``build_sam3_image_model``.
+
+    ``SIMFOUNDRY_SAM3_CHECKPOINT`` points at the native ``sam3.pt`` (not the HF-transformers
+    ``model.safetensors`` beside it). Unset keeps the default of downloading from the gated HF repo.
+    """
+    path = os.environ.get("SIMFOUNDRY_SAM3_CHECKPOINT")
+    if not path:
+        return {}
+    if not os.path.isfile(path):
+        raise FileNotFoundError(f"SIMFOUNDRY_SAM3_CHECKPOINT does not exist: {path}")
+    return {"checkpoint_path": path, "load_from_HF": False}
+
+
 class SAM3(torch.nn.Module):
 
     def __init__(
@@ -52,7 +66,9 @@ class SAM3(torch.nn.Module):
             gpus_to_use = range(torch.cuda.device_count()) if n_video_devices == -1 else n_video_devices
             model = build_sam3_video_predictor(gpus_to_use=gpus_to_use)
         else:
-            raw_model = build_sam3_image_model(bpe_path=bpe_path, enable_inst_interactivity=enable_inst_interactivity)
+            raw_model = build_sam3_image_model(
+                bpe_path=bpe_path, enable_inst_interactivity=enable_inst_interactivity, **sam3_checkpoint_kwargs()
+            )
             model = Sam3Processor(raw_model, confidence_threshold=confidence_threshold)
         self.model = model
         self.video = video
