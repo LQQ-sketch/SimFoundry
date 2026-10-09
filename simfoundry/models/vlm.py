@@ -1316,7 +1316,13 @@ class FLUX1(VLM_API):
         model_path = os.environ.get("SIMFOUNDRY_FLUX_KONTEXT_PATH") or self.MODEL_IDS[model]
         self.pipeline = pipeline_cls.from_pretrained(model_path, torch_dtype=dtype)
         if enable_cpu_offload:
-            self.pipeline.enable_model_cpu_offload()
+            # "model" moves the whole 12B transformer (~24 GiB in bf16) onto the GPU at once, which
+            # OOMs a 24 GiB card; "sequential" streams it layer by layer (slower, a few GiB peak).
+            offload_mode = (os.environ.get("SIMFOUNDRY_FLUX_OFFLOAD") or "model").strip().lower()
+            if offload_mode == "sequential":
+                self.pipeline.enable_sequential_cpu_offload()
+            else:
+                self.pipeline.enable_model_cpu_offload()
         self.device = device
         # self.pipeline.to(device=self.device)
 
