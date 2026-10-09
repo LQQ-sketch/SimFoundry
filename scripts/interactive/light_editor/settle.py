@@ -65,6 +65,14 @@ def main():
         help="Hinge rotation in degrees above which a joint is reported as "
              "drifted (default: 2)",
     )
+    parser.add_argument(
+        "--no-wake",
+        dest="wake",
+        action="store_false",
+        help="Do not wake sleeping bodies before stepping. Only for reproducing the old "
+             "behaviour: a restored scene is asleep, so floating props never fall and "
+             "the check passes anything.",
+    )
     parser.add_argument("--promote", action="store_true", help="Also write _scene_state_latest.json")
     parser.add_argument("--report", default=None, help="Write a JSON report to this path")
     parser.add_argument("--headless", action="store_true", default=True, help="No GUI (default)")
@@ -93,6 +101,8 @@ def main():
         "preserved_keys": [],
         # Where the floor plane was actually placed.
         "ground_plane": None,
+        # Rigid bodies that were asleep after restore() and were woken before stepping.
+        "woken": 0,
         "error": None,
     }
 
@@ -152,11 +162,29 @@ def main():
 
         og.sim.play()
 
+        scene = og.sim.scenes[0]
+
+        # restore() leaves every rigid body asleep, and gravity does not wake a
+        # sleeping body. Without this a prop floating 5 cm above the floor never
+        # falls, so the whole check reads 0.0000 and passes anything. Waking a body
+        # that is already at rest costs nothing, so wake them all before stepping.
+        woken = 0
+        if args.wake:
+            for obj in scene.objects:
+                for link in (getattr(obj, "links", None) or {}).values():
+                    if getattr(link, "is_asleep", False):
+                        woken += 1
+                    wake = getattr(link, "wake", None)
+                    if callable(wake):
+                        wake()
+        report["woken"] = woken
+        print(f"Woke {woken} sleeping rigid body(ies)" if args.wake else
+              "Not waking bodies (--no-wake): floating props will NOT fall")
+
         print(f"Settling for {args.steps} steps ...")
         for _ in range(args.steps):
             og.sim.step()
 
-        scene = og.sim.scenes[0]
         print(f"\n{'object':28s} {'root (m)':>9s}  {'joint drift':<34s}")
         print("-" * 76)
 

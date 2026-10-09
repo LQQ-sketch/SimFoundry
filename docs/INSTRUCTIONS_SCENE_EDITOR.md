@@ -1017,6 +1017,12 @@ wooden_organizer_0              0.0000  drawer_1 0.0421 m             <-- unsett
 mesh_background_0               0.0000
 ```
 
+**It wakes every rigid body before stepping.** `restore()` leaves them asleep, and gravity
+does not wake a sleeping body, so without this a prop floating above the floor never falls
+and the table reads `0.0000` for anything. The run prints `Woke N sleeping rigid body(ies)`;
+`--no-wake` reproduces the old behaviour and exists only for that. To check a settle is real,
+lift one prop 5 cm in a copy of the JSON and confirm it comes back flagged `<-- unsettled`.
+
 **Root movement and joint drift are reported apart**, because "the cup rolled"
 and "the drawer shut" are different problems. A scene saved with a drawer open
 settles it closed while the object's base never moves at all — which used to
