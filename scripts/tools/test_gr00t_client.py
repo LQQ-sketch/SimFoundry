@@ -23,6 +23,45 @@ args = ap.parse_args()
 client = Gr00tClient(host=args.host, port=args.port, open_loop_horizon=8)
 print("policy_mode:", client.policy_mode)
 
+
+def describe(obj, depth=0):
+    """One-line-per-leaf summary of a server response: types, dict keys, array shapes."""
+    pad = "  " * depth
+    if isinstance(obj, dict):
+        for k, v in obj.items():
+            print(f"{pad}[{k!r}] -> {type(v).__name__}", end="")
+            if isinstance(v, (dict, list, tuple)):
+                print()
+                describe(v, depth + 1)
+            else:
+                print(f"  shape={getattr(v, 'shape', None)} dtype={getattr(v, 'dtype', None)}")
+    elif isinstance(obj, (list, tuple)):
+        print(f"{pad}{type(obj).__name__} of length {len(obj)}")
+        for i, v in enumerate(obj[:4]):
+            print(f"{pad}  item {i}: {type(v).__name__}", end="")
+            if isinstance(v, (dict, list, tuple)):
+                print()
+                describe(v, depth + 2)
+            else:
+                print(f"  shape={getattr(v, 'shape', None)} dtype={getattr(v, 'dtype', None)}")
+    else:
+        print(f"{pad}{type(obj).__name__} shape={getattr(obj, 'shape', None)}")
+
+
+# Spy on the raw response so a format mismatch shows what the server really returned.
+_orig_get_action = client.client.get_action
+
+
+def _spy(request, *a, **k):
+    print("REQUEST keys:", sorted(request.keys()))
+    response = _orig_get_action(request, *a, **k)
+    print("RAW RESPONSE structure:")
+    describe(response)
+    return response
+
+
+client.client.get_action = _spy
+
 rng = np.random.default_rng(0)
 img = lambda: rng.integers(0, 255, size=(720, 1280, 3), dtype=np.uint8)
 obs = {
