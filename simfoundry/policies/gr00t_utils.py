@@ -193,6 +193,17 @@ class MsgSerializer:
             return stacked.reshape(obj["jpeg_shape"])
         if "__ndarray_class__" in obj:
             return np.load(io.BytesIO(obj["as_npy"]), allow_pickle=False)
+        # N1.7 servers pack arrays with msgpack-numpy: {b"nd": True, b"type": "<f4",
+        # b"shape": [...], b"data": <bytes>} (keys are bytes). Without this the action chunk
+        # stays a dict and `.shape` fails.
+        if b"nd" in obj or "nd" in obj:
+            def _get(key):
+                return obj[key.encode()] if key.encode() in obj else obj[key]
+
+            if _get("nd") is True:
+                dtype = _get("type")
+                dtype = np.dtype(dtype.decode() if isinstance(dtype, bytes) else dtype)
+                return np.frombuffer(_get("data"), dtype=dtype).reshape(_get("shape")).copy()
         return obj
 
     @staticmethod
