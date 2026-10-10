@@ -166,7 +166,10 @@ class MsgSerializer:
     def decode_custom_classes(obj):
         if not isinstance(obj, dict):
             return obj
-        if "__ModalityConfig_class__" in obj:
+        # N1.6 servers tag a ModalityConfig with "__ModalityConfig_class__"; N1.7 dropped the
+        # "_class_" ("__ModalityConfig__"). Matching only the old tag left the config as a plain
+        # dict and every `cfg.modality_keys` access failed.
+        if "__ModalityConfig_class__" in obj or "__ModalityConfig__" in obj:
             if 'as_dict' in obj:
                 return ModalityConfig(**obj["as_dict"])
             elif 'as_json' in obj:
