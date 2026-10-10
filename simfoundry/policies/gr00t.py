@@ -4,6 +4,7 @@
 
 from .abstract_client import InferenceClient
 import io
+import os
 import numpy as np
 import torch
 from .gr00t_utils import PolicyClient
@@ -121,6 +122,56 @@ class Gr00tClient(InferenceClient):
         return {"action": pred_action_chunk, "viz": vis_images}
 
     def _infer_n17(self, obs: dict, instruction: str) -> dict:
+        """N1.7 request for the public ``run_gr00t_server.py --use-sim-policy-wrapper``.
+
+        That wrapper takes flat ``video.<cam>`` / ``state.<name>`` keys holding raw uint8 /
+        float32 arrays shaped (B, T, ...), and returns ``action.<key>`` arrays shaped (B, T, D).
+        The JPEG request below targets an internal real-robot wrapper that the public server
+        does not ship; without ``--use-sim-policy-wrapper`` the server rejects it with
+        "Observation must contain a 'video' key". Set SIMFOUNDRY_GR00T_JPEG=1 to use it.
+        """
+        if os.environ.get("SIMFOUNDRY_GR00T_JPEG") == "1":
+            return self._infer_n17_jpeg(obs, instruction)
+
+        request_data = {}
+        if 'state' in self.modality_config:
+            for key in self.modality_config['state'].modality_keys:
+                if key in obs:
+                    request_data[f'state.{key}'] = obs[key][None, None, ...].astype(np.float32)
+
+        vis_images = []
+        for key in self.modality_config['video'].modality_keys:
+            resized = resize_with_pad(obs[key], RESOLUTION[0], RESOLUTION[1])
+            vis_images.append(resized)
+            request_data[f'video.{key}'] = np.asarray(resized, dtype=np.uint8)[None, None, ...]
+
+        lang = [instruction]
+        for key in self.modality_config['language'].modality_keys:
+            request_data[key] = lang
+            alt_key = key.replace("annotation.language.", "annotation.")
+            if alt_key != key:
+                request_data[alt_key] = lang
+
+        response = self.client.get_action(request_data)
+
+        # Only joint_position + gripper_position are executed (the DROID control loop ignores
+        # the relative eef_9d action). The wrapper keeps a batch dim: (B, T, D) -> (T, D).
+        joint_actions = np.asarray(response[0]["action.joint_position"])
+        gripper_actions = np.asarray(response[0]["action.gripper_position"])
+        if joint_actions.ndim == 3:
+            joint_actions = joint_actions[0]
+        if gripper_actions.ndim == 3:
+            gripper_actions = gripper_actions[0]
+        min_horizon = min(joint_actions.shape[0], gripper_actions.shape[0])
+        pred_action_chunk = np.concatenate(
+            (joint_actions[:min_horizon], gripper_actions[:min_horizon]),
+            axis=1,
+        )
+
+        vis_images = np.concatenate(vis_images, axis=1)
+        return {"action": pred_action_chunk, "viz": vis_images}
+
+    def _infer_n17_jpeg(self, obs: dict, instruction: str) -> dict:
         """N1.7 request: JPEG-encoded images, no extra batch dim on actions.
 
         Matches N17eefRelative.build_request() from droid_control_loop.
