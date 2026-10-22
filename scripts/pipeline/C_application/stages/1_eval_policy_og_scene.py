@@ -264,6 +264,19 @@ def main(cfg):
     env = og.Environment(configs=og_cfg)
     env.reset()
 
+    # The default skybox is a bright dome light and the scene is mostly white, so renders tend to
+    # clip. Scaling the current intensity (rather than setting an absolute value) lets a sweep
+    # work without knowing the default. Read with .get, so pass it with a '+' prefix.
+    skybox_scale = cfg.s15_eval.get("skybox_intensity_scale", None)
+    skybox = og.sim.skybox
+    if skybox is not None:
+        print(f"Skybox intensity: {skybox.intensity}  color: {skybox.color}")
+        if skybox_scale is not None:
+            skybox.intensity = float(skybox.intensity) * float(skybox_scale)
+            print(f"Skybox intensity scaled by {skybox_scale} -> {skybox.intensity}")
+    elif skybox_scale is not None:
+        print("WARNING: s15_eval.skybox_intensity_scale was set but this scene has no skybox")
+
     # Get robot reference for controller setup
     assert len(env.robots) == 1, "Evaluation only supports a single robot!"
     robot = env.robots[0]

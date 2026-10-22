@@ -46,6 +46,9 @@ for cond in "$@"; do
     # gripper_invert is read with cfg.s15_eval.get("gripper_invert", True), so it is not in
     # real2sim_cfg.yaml and has to be appended with '+'.
     grip_noinvert) EXTRA=("+s15_eval.gripper_invert=false") ;;
+    # Skybox brightness sweep: scales the scene's default dome-light intensity.
+    sky_half) EXTRA=("+s15_eval.skybox_intensity_scale=0.5") ;;
+    sky_quarter) EXTRA=("+s15_eval.skybox_intensity_scale=0.25") ;;
     *) echo "[matrix] unknown condition '${cond}', skipping" >&2; continue ;;
   esac
 
