@@ -13,7 +13,12 @@
 #   scripts/tools/run_eval_matrix.sh <n_episodes> <timeout_s> <condition> [<condition> ...]
 #   scripts/tools/run_eval_matrix.sh 5 30 base floor prompt_short horizon4 grip_noinvert
 #
-# Env overrides: SCENE_JSON, SCENE_NAME, ROOT_DIR, PORT, LOG_DIR.
+# Env overrides: SCENE_JSON, SCENE_NAME, ROOT_DIR, PORT, LOG_DIR, TASK, EVAL_PROMPT.
+# TASK and EVAL_PROMPT let the same runner drive one of the published example scenes, e.g. as a
+# positive control for the policy wiring:
+#   TASK=droid/droid_desk_put_marker_in_cup SCENE_NAME=droid_desk_put_marker_in_cup \
+#   SCENE_JSON=<abs path to the example scene state json> EVAL_PROMPT="put the marker in the cup" \
+#   scripts/tools/run_eval_matrix.sh 3 30 base
 set -u
 
 if [[ $# -lt 3 ]]; then
@@ -30,7 +35,8 @@ ROOT_DIR="${ROOT_DIR:-${REPO_DIR}/Data}"
 PORT="${PORT:-5555}"
 SCENE_JSON="${SCENE_JSON:-${ROOT_DIR}/${SCENE_NAME}/s14_og/reconstructed_og_scene.json}"
 LOG_DIR="${LOG_DIR:-/data/projects/simfoundry/eval_matrix}"
-DEFAULT_PROMPT="put the white cup in the orange bowl"
+TASK="${TASK:-droid/droid_desk_put_cup_in_bowl}"
+DEFAULT_PROMPT="${EVAL_PROMPT:-put the white cup in the orange bowl}"
 
 mkdir -p "${LOG_DIR}"
 cd "${REPO_DIR}"
@@ -55,7 +61,7 @@ for cond in "$@"; do
   log="${LOG_DIR}/${cond}.log"
   echo "[matrix] $(date +%H:%M:%S) ${cond}: ${N_EPISODES} episodes, ${TIMEOUT_S}s, prompt='${PROMPT}' ${EXTRA[*]:-} -> ${log}"
   python scripts/pipeline/C_application/stages/1_eval_policy_og_scene.py \
-    task=droid/droid_desk_put_cup_in_bowl \
+    task="${TASK}" \
     scene_name="${SCENE_NAME}" root_dir="${ROOT_DIR}" \
     s15_eval.scene_json="${SCENE_JSON}" \
     "s15_eval.prompt=\"${PROMPT}\"" \
