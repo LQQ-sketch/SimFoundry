@@ -269,8 +269,15 @@ def run_articulation(config_name: str, conda_env: str, simfoundry_path: str, exp
         f"{env_path}/bin/python", f"{simfoundry_path}/complete_workflow.py", "--config-name", config_name
     ]
     
+    # The workflow later launches its sapien simulator as `conda run -n $CONDA_DEFAULT_ENV python ...`
+    # (articulate_simfoundry.py). Under `mamba run -n simfoundry` that variable still names simfoundry,
+    # which has no sapien, and its bin leads PATH; point both at the target env.
+    env = os.environ.copy()
+    env["CONDA_DEFAULT_ENV"] = conda_env
+    env["PATH"] = f"{env_path}/bin{os.pathsep}{env.get('PATH', '')}"
+
     logger.info(f"Running: {' '.join(cmd)}")
-    result = subprocess.run(cmd)
+    result = subprocess.run(cmd, env=env)
     
     if result.returncode != 0:
         raise RuntimeError(f"Articulation failed with return code: {result.returncode}")
