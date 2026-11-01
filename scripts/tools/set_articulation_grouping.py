@@ -64,6 +64,9 @@ def build(fixed: str, movable_ids: list[int], all_ids: list[int], part: str, joi
         "links": [{"link_name": base_link}, {"link_name": moving_link}],
         "joints": [{"joint_name": f"{part}_1_joint", "joint_type": joint,
                     "parent_link": base_link, "child_link": moving_link}],
+        # The workflow adds this key when it saves its own tree, and merge.py reads it back from the
+        # cache (articulation_tree_dict['fixed_part_name']); the VLM's raw reply does not carry it.
+        "fixed_part_name": fixed,
     }
     others = [i for i in all_ids if i not in movable_ids]
     merge = {
