@@ -14,7 +14,9 @@ way it faces. Read-only; run in any env that has numpy and trimesh::
 
 Position columns are fractions of the object's own bounding box (0 = min side, 1 = max side) along
 the mesh's x, y and z; ``thin`` is the axis the segment is thinnest along (a panel's normal), and the
-extents are the segment's size as a fraction of the whole object's.
+extents are the segment's size as a fraction of the whole object's. The last six columns are the
+segment's own bounding box in the mesh's units, which is what a hand correction (shifting one segment)
+is computed from.
 """
 import argparse
 import sys
@@ -60,7 +62,7 @@ def describe(mesh, face_ids):
         # A panel's normal is the axis it is thinnest along; the area-weighted normal sum is no use
         # on a closed piece, where it cancels to zero.
         thin = "xyz"[int(np.argmin(extent))]
-        rows.append((int(seg), int(sel.sum()), weight.sum(), frac, thin, extent))
+        rows.append((int(seg), int(sel.sum()), weight.sum(), frac, thin, extent, sub.min(axis=0), sub.max(axis=0)))
     return rows
 
 
@@ -72,10 +74,12 @@ def main(argv=None) -> int:
     mesh, face_ids = load_faces(args.object_dir.resolve())
     print(f"mesh: {len(mesh.faces)} faces, bounds {np.round(mesh.bounds[0], 3)} to {np.round(mesh.bounds[1], 3)}")
     total = mesh.area_faces.sum()
-    print(f"{'id':>3} {'faces':>6} {'area%':>6}  {'pos x':>5} {'pos y':>5} {'pos z':>5}  {'thin':>4}  {'ext x':>5} {'ext y':>5} {'ext z':>5}")
-    for seg, n, area, frac, thin, ext in sorted(describe(mesh, face_ids), key=lambda r: -r[2]):
+    print(f"{'id':>3} {'faces':>6} {'area%':>6}  {'pos x':>5} {'pos y':>5} {'pos z':>5}  {'thin':>4}  {'ext x':>5} {'ext y':>5} {'ext z':>5}"
+          f"  {'min x':>7} {'min y':>7} {'min z':>7}  {'max x':>7} {'max y':>7} {'max z':>7}")
+    for seg, n, area, frac, thin, ext, lo, hi in sorted(describe(mesh, face_ids), key=lambda r: -r[2]):
         label = " -1" if seg < 0 else f"{seg:>3}"
-        print(f"{label} {n:>6} {100 * area / total:>6.1f}  {frac[0]:>5.2f} {frac[1]:>5.2f} {frac[2]:>5.2f}  {thin:>4}  {ext[0]:>5.2f} {ext[1]:>5.2f} {ext[2]:>5.2f}")
+        print(f"{label} {n:>6} {100 * area / total:>6.1f}  {frac[0]:>5.2f} {frac[1]:>5.2f} {frac[2]:>5.2f}  {thin:>4}  {ext[0]:>5.2f} {ext[1]:>5.2f} {ext[2]:>5.2f}"
+              f"  {lo[0]:>7.3f} {lo[1]:>7.3f} {lo[2]:>7.3f}  {hi[0]:>7.3f} {hi[1]:>7.3f} {hi[2]:>7.3f}")
     return 0
 
 
