@@ -505,6 +505,11 @@ def main(cfg):
         articulate_cfg.s4_merge_mesh_parts.interactive_correction = cfg.s9_articulate_objects.get(
             "merge_interactive_correction", False
         )
+    # The template names its own s5b model (Gemini); without this a run on another
+    # backend would reach physics estimation and only then fail to connect.
+    physics_model = cfg.s9_articulate_objects.get("physics_model", None)
+    if physics_model and "s5b_estimate_physics" in articulate_cfg:
+        articulate_cfg.s5b_estimate_physics.model_name = physics_model
     if postprocess_objects and "s5_articulate" in articulate_cfg:
         # Never re-articulate: stage 9 already decided which objects are
         # complete (and rmtree'd the stale ones), so the template's

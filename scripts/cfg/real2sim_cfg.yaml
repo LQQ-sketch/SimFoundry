@@ -318,6 +318,7 @@ s9_articulate_objects:
   tree_model: gemini-3.1-pro-preview       # articulate-anything s2 VLM model
   merge_model: gemini-3.1-pro-preview        # articulate-anything s4 VLM model
   s5_model: gemini-3.1-pro-preview           # articulate-anything joint-refinement VLM model
+  physics_model: null                        # articulate-anything s5b (mass/friction/damping) VLM model; null keeps the template's own choice
   # Critic on: its rubric has a `joint_limit` category covering the failure mode seen on
   # reconstructed assets (wrong range/direction). Previously true, commented "avoid brittle
   # critic loop" - re-enable with max_iter>1 so a flagged joint actually gets a second attempt;
