@@ -264,7 +264,9 @@ def run_articulation(config_name: str, conda_env: str, simfoundry_path: str, exp
     
     cmd = [
         "conda", "run", "--prefix", env_path, "--no-capture-output", "--cwd", simfoundry_path,
-        "python", f"{simfoundry_path}/complete_workflow.py", "--config-name", config_name
+        # Absolute interpreter: this stage itself runs under `mamba run -n simfoundry`, and a nested
+        # `conda run` leaves that env's bin first on PATH, so a bare `python` is the wrong env's.
+        f"{env_path}/bin/python", f"{simfoundry_path}/complete_workflow.py", "--config-name", config_name
     ]
     
     logger.info(f"Running: {' '.join(cmd)}")
