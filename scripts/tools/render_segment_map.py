@@ -31,9 +31,9 @@ SIZE = 1000
 MARGIN = 70
 
 
-def load_faces(object_dir: Path):
+def load_faces(object_dir: Path, mesh_override: Path | None = None):
     parts = object_dir / "s3_segment_mesh/rendered_parts"
-    mesh_path, ids_path = parts / "original_mesh.glb", parts / "face_ids.npy"
+    mesh_path, ids_path = mesh_override or parts / "original_mesh.glb", parts / "face_ids.npy"
     for path in (mesh_path, ids_path):
         if not path.is_file():
             raise SystemExit(f"missing {path}")
@@ -128,9 +128,11 @@ def main(argv=None) -> int:
     parser.add_argument("--object-dir", required=True, type=Path)
     parser.add_argument("--out-dir", required=True, type=Path)
     parser.add_argument("--assign", type=Path, help="JSON {group: [segment ids]}; colours by group")
+    parser.add_argument("--mesh-path", type=Path, help="draw this glb instead of rendered_parts/original_mesh.glb "
+                        "(e.g. the shifted_preview.glb that shift_segments.py writes)")
     args = parser.parse_args(argv)
 
-    mesh, face_ids = load_faces(args.object_dir.resolve())
+    mesh, face_ids = load_faces(args.object_dir.resolve(), args.mesh_path)
     tri = mesh.triangles
     ids = set(int(i) for i in np.unique(face_ids))
     colours, labels = palette(ids), {}
