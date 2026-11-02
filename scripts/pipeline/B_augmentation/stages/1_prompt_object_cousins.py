@@ -153,6 +153,66 @@ def parse_variation_options(response_text):
     
     return variations
 
+class FluxCousinImageEditor:
+    """Stand-in for the Gemini image client when ``image_model`` is ``flux``.
+
+    Offers the two calls this stage makes on ``nano_banana`` (``__call__`` and ``get_result_images``)
+    on top of local FLUX.1-Kontext, for runs without Gemini image generation. Differences that change
+    what comes out, none of which the Gemini path has:
+
+    - Kontext edits one image, so only the first of ``image_paths`` (the object) is used; the scene
+      image is not seen by the generator. The reasonableness check still compares against the scene.
+    - It cannot write transparency. The cut-out is flattened onto white, and the prompt asks for a
+      plain white background; ``remove_background_with_rembg`` makes it transparent again afterwards.
+    - Kontext only accepts its preferred resolutions, so the object is fitted into the closest one.
+    - The seed is advanced on every call: a retry with the same seed would return the same image.
+    """
+
+    BACKGROUND = (255, 255, 255)
+
+    def __init__(self, num_inference_steps=20):
+        from simfoundry.models.vlm import FLUX1
+
+        self.model = FLUX1(model="FLUX.1-Kontext-dev")
+        self.num_inference_steps = num_inference_steps
+        self._calls = 0
+
+    def _fit(self, image_path):
+        image = Image.open(image_path).convert("RGBA")
+        flat = Image.new("RGB", image.size, self.BACKGROUND)
+        flat.paste(image, mask=image.split()[3])
+        ratio = flat.width / flat.height
+        out_w, out_h = min(self.model.IMAGE_SHAPES, key=lambda wh: abs(wh[0] / wh[1] - ratio))
+        scale = min(out_w / flat.width, out_h / flat.height)
+        size = (max(1, round(flat.width * scale)), max(1, round(flat.height * scale)))
+        canvas = Image.new("RGB", (out_w, out_h), self.BACKGROUND)
+        canvas.paste(flat.resize(size, Image.LANCZOS), ((out_w - size[0]) // 2, (out_h - size[1]) // 2))
+        return canvas
+
+    def __call__(self, prompt, image_paths, temperature=None, top_p=None, seed=None, print_results=False):
+        prompt = (
+            prompt.replace("Generate the image with transparent background.", "Keep a plain white background.")
+            .replace("If a scene image is provided, make sure the modified object style fits the scene context.", "")
+        )
+        with tempfile.NamedTemporaryFile(suffix=".png") as tmp:
+            self._fit(image_paths[0]).save(tmp.name)
+            call_seed = None if seed is None else int(seed) + self._calls
+            self._calls += 1
+            return [
+                self.model(
+                    prompt=prompt,
+                    image_path=tmp.name,
+                    num_inference_steps=self.num_inference_steps,
+                    seed=call_seed,
+                    print_results=print_results,
+                )
+            ]
+
+    @staticmethod
+    def get_result_images(result):
+        return list(result)
+
+
 def remove_background_with_rembg(in_path, out_path):
     """Remove background with rembg and save as PNG (with transparency)."""
     pil_img = Image.open(in_path)
@@ -239,11 +299,15 @@ def main(cfg):
         location="global",
         model=cfg.prompt_cousin_structured.get("text_model", "gemini-2.5-pro"),
     )
-    nano_banana = Gemini(
-        project=cfg.gcloud_project,
-        location="global",
-        model=cfg.prompt_cousin_structured.get("image_model", "gemini-3-pro-image"),
-    )
+    image_model_name = cfg.prompt_cousin_structured.get("image_model", "gemini-3-pro-image")
+    if image_model_name == "flux":
+        nano_banana = FluxCousinImageEditor()
+    else:
+        nano_banana = Gemini(
+            project=cfg.gcloud_project,
+            location="global",
+            model=image_model_name,
+        )
 
     # Iterate over all upsampled transparent images from step 6
     processed_objects = 0
